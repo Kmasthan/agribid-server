@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.agribid_server.AgribidServerApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-05-28T12:46:02.374Z" hostname="spaneos-System-Product-Name" time="1.468">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.agribid_server.AgribidServerApplicationTests" time="1.468"/>
+  <system-out><![CDATA[18:15:59.551 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.agribid_server.AgribidServerApplicationTests]: AgribidServerApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+18:15:59.770 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.agribid_server.AgribidServerApplication for test class com.agribid_server.AgribidServerApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.6)
+
+2025-05-28T18:16:00.540+05:30  INFO 63823 --- [agribid-server] [    Test worker] c.a.AgribidServerApplicationTests        : Starting AgribidServerApplicationTests using Java 17.0.15 with PID 63823 (started by personal in /home/personal/AgriBid/agribid-server)
+2025-05-28T18:16:00.546+05:30  INFO 63823 --- [agribid-server] [    Test worker] c.a.AgribidServerApplicationTests        : No active profile set, falling back to 1 default profile: "default"
+2025-05-28T18:16:02.348+05:30  INFO 63823 --- [agribid-server] [    Test worker] c.a.AgribidServerApplicationTests        : Started AgribidServerApplicationTests in 2.307 seconds (process running for 4.469)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
