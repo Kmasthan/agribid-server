@@ -10,7 +10,7 @@ public class CORSConfig implements WebMvcConfigurer{
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-        .allowedOrigins("http://localhost:4200") // Allowing specific origin (e.g., React app)
+        .allowedOrigins("http://localhost:4200", "https://glittering-stardust-61aef8.netlify.app") // Allowing specific origin (e.g., React app)
         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH") // Allowed methods
         .allowedHeaders("*") // Allowing all headers
         .allowCredentials(true) // Allowing credentials
