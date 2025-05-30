@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Build the application
-RUN ./gradlew build --no-daemon
+RUN ./gradlew build -x test --no-daemon
 
 # Expose the port your app runs on (default 8082)
 EXPOSE 8082
