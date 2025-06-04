@@ -1,0 +1,64 @@
+package com.agribid_server.serviceImpl;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.agribid_server.entity.CropListing;
+import com.agribid_server.entity.FarmerCropListingDetails;
+import com.agribid_server.exception.FarmerException;
+import com.agribid_server.mongoTemplateService.FarmerMongoTemplateService;
+import com.agribid_server.repository.FarmerCropListingDetailsRepository;
+import com.agribid_server.service.FarmerService;
+
+@Service
+public class FarmerServiceImpl implements FarmerService {
+
+	@Autowired
+	private FarmerCropListingDetailsRepository farmerCropListingDetailsRepository;
+
+	@Autowired
+	private FarmerMongoTemplateService farmerMongoTemplateService;
+
+	@Override
+	public String addNewCropToListing(String farmerId, String farmerName, String farmerPhone, String farmerEmail,
+			int position, CropListing newCrop) {
+		try {
+			Objects.requireNonNull(farmerId, "Farmer id is required!");
+			Objects.requireNonNull(farmerName, "Farmer name is required!");
+			Objects.requireNonNull(farmerPhone, "Farmer Phone is required!");
+			Objects.requireNonNull(newCrop, "New crop not found!");
+
+			newCrop.setId(farmerId + "-" + position);
+			return farmerMongoTemplateService.addCropWithUpsert(farmerId, farmerName, farmerPhone, farmerEmail,
+					newCrop);
+		} catch (Exception e) {
+			throw new FarmerException(e.getMessage());
+		}
+	}
+
+	@Override
+	public List<CropListing> getFarmerCropListings(String farmerId) {
+		try {
+			Objects.requireNonNull(farmerId, "Farmer id is required!");
+			FarmerCropListingDetails farmerCropListingDetails = farmerCropListingDetailsRepository
+					.findByFarmerId(farmerId);
+
+			if (farmerCropListingDetails != null && farmerCropListingDetails.getCropsList() != null
+					&& !farmerCropListingDetails.getCropsList().isEmpty()) {
+				return farmerCropListingDetails.getCropsList().stream()
+						.sorted(Comparator.comparing(CropListing::getState)).collect(Collectors.toList());
+			} else {
+				throw new FarmerException("Crops list is empty");
+			}
+		} catch (Exception e) {
+			throw new FarmerException(e.getMessage());
+		}
+	}
+
+}

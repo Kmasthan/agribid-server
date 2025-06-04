@@ -1,5 +1,6 @@
 package com.agribid_server.entity;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import org.springframework.data.annotation.Id;
@@ -11,13 +12,17 @@ public class User {
 	private String Id;
 
 	private String name;
+	
+	@Indexed(unique = true)
 	private String mobileNumber;
+	
 	private String email;
 	private String password;
 	private String state;
 	private String district;
 	private String mandal;
 	private String village;
+	private String userType;
 
 	public String getId() {
 		return Id;
@@ -89,6 +94,14 @@ public class User {
 
 	public void setVillage(String village) {
 		this.village = village;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 
 }

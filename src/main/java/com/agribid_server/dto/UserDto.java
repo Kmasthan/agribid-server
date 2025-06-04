@@ -2,6 +2,7 @@ package com.agribid_server.dto;
 
 public class UserDto {
 
+	private String id;
 	private String name;
 	private String mobileNumber;
 	private String email;
@@ -11,6 +12,14 @@ public class UserDto {
 	private String mandal;
 	private String village;
 	private String userType;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;

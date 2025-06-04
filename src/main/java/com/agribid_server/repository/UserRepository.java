@@ -8,4 +8,7 @@ import com.agribid_server.entity.User;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
 
+	User findByMobileNumberOrEmailAndUserType(String userName, String userName2, String userType);
+
+
 }
