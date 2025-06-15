@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.agribid_server.dto.APISuccessMessage;
 import com.agribid_server.dto.LoginDto;
 import com.agribid_server.dto.UserDto;
 import com.agribid_server.dto.UserNavItems;
@@ -37,14 +38,17 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 
 	@Override
-	public String saveUser(UserDto registeredUser) {
+	public APISuccessMessage saveUser(UserDto registeredUser) {
 		try {
 			if (registeredUser != null) {
 				validateUserRegistrationData(registeredUser);
 				User newUser = new User();
 				BeanUtils.copyProperties(registeredUser, newUser);
-				userRepository.save(newUser);
-				return "Farmer" + registeredUser.getUserType().toString() + "succesfully";
+				User savedUser = userRepository.save(newUser);
+				UserDto savedUserDto = new UserDto();
+				BeanUtils.copyProperties(savedUser, savedUserDto);
+				savedUserDto.setPassword(null);
+				return new APISuccessMessage("Registration succesfull, Welcome to AGRI BID", "success", savedUserDto);
 			} else {
 				throw new UserException("User data not found!");
 			}
@@ -55,14 +59,37 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * << validateUserRegistrationData() is to validate the user registration data >>
-	 * 
 	 * @param registeredUser
 	 */
 	private void validateUserRegistrationData(UserDto registeredUser) {
-		Objects.requireNonNull(registeredUser.getName(), "User name is required for registration");
-		Objects.requireNonNull(registeredUser.getMobileNumber(), "User mobile number is required for registration");
-		Objects.requireNonNull(registeredUser.getPassword(), "Password is required for registration");
+		try {
+			Objects.requireNonNull(registeredUser.getName(), "User name is required for registration");
+			Objects.requireNonNull(registeredUser.getMobileNumber(), "User mobile number is required for registration");
+			
+			// check the user already exists
+			checkTheUserExistsOrNot(registeredUser);
+		} catch (Exception e) {
+			throw new UserException(e.getMessage());
+		}
 
+	}
+
+	/**
+	 * << To check the user already exist or not >>
+	 * @param registeredUser
+	 */
+	private void checkTheUserExistsOrNot(UserDto registeredUser) {
+		User existingUser = userRepository.findByMobileNumberOrEmailAndUserType(registeredUser.getMobileNumber().trim(),
+				registeredUser.getEmail().trim(), registeredUser.getUserType().trim());
+
+		if (existingUser != null) {
+			if (existingUser.getMobileNumber().trim().equals(registeredUser.getMobileNumber().trim()))
+				throw new UserException(
+						"User already exists with the mobile number " + registeredUser.getMobileNumber());
+
+			if (existingUser.getEmail().trim().equals(registeredUser.getEmail().trim()))
+				throw new UserException("User already exists with the email " + registeredUser.getEmail().trim());
+		}
 	}
 
 	@Override

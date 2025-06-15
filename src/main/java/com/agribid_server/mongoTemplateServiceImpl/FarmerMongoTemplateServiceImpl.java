@@ -1,4 +1,4 @@
-package com.agribid_server;
+package com.agribid_server.mongoTemplateServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;

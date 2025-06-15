@@ -1,10 +1,11 @@
 package com.agribid_server.exception;
 
-public class UserException extends RuntimeException {
+public class RegionDataException extends RuntimeException {
+
 	private static final long serialVersionUID = 1L;
 	private final String message;
 
-	public UserException(String msg) {
+	public RegionDataException(String msg) {
 		super();
 		this.message = msg;
 	}

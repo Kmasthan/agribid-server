@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.agribid_server.dto.APISuccessMessage;
 import com.agribid_server.dto.LoginDto;
 import com.agribid_server.dto.UserDto;
 import com.agribid_server.dto.UserNavItems;
 import com.agribid_server.service.UserService;
+import com.sun.net.httpserver.Authenticator.Success;
 
 
 @RestController
@@ -25,16 +27,16 @@ public class UserController {
 
 	@GetMapping("welcome")
 	public String welcome() {
-		return "Welcome to spring boot";
+		return "Welcome to agri-bid";
 	}
 	
 	@PostMapping("save-farmer")
-	public String saveFarmer(@RequestBody UserDto farmer) {
+	public APISuccessMessage saveFarmer(@RequestBody UserDto farmer) {
 		return userService.saveUser(farmer);
 	}
 	
 	@PostMapping("save-buyer")
-	public String saveBuyer(@RequestBody UserDto buyer) {
+	public APISuccessMessage saveBuyer(@RequestBody UserDto buyer) {
 		return userService.saveUser(buyer);
 	}
 	
