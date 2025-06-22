@@ -1,6 +1,6 @@
 package com.agribid_server.serviceImpl;
 
-import java.util.Collections;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.agribid_server.dto.APISuccessMessage;
 import com.agribid_server.entity.CropListing;
 import com.agribid_server.entity.FarmerCropListingDetails;
 import com.agribid_server.exception.FarmerException;
@@ -26,7 +27,7 @@ public class FarmerServiceImpl implements FarmerService {
 	private FarmerMongoTemplateService farmerMongoTemplateService;
 
 	@Override
-	public String addNewCropToListing(String farmerId, String farmerName, String farmerPhone, String farmerEmail,
+	public APISuccessMessage addNewCropToListing(String farmerId, String farmerName, String farmerPhone, String farmerEmail,
 			int position, CropListing newCrop) {
 		try {
 			Objects.requireNonNull(farmerId, "Farmer id is required!");
@@ -35,6 +36,7 @@ public class FarmerServiceImpl implements FarmerService {
 			Objects.requireNonNull(newCrop, "New crop not found!");
 
 			newCrop.setId(farmerId + "-" + position);
+			newCrop.setListedAt(LocalDate.now());
 			return farmerMongoTemplateService.addCropWithUpsert(farmerId, farmerName, farmerPhone, farmerEmail,
 					newCrop);
 		} catch (Exception e) {
@@ -56,6 +58,28 @@ public class FarmerServiceImpl implements FarmerService {
 			} else {
 				throw new FarmerException("Crops list is empty");
 			}
+		} catch (Exception e) {
+			throw new FarmerException(e.getMessage());
+		}
+	}
+
+	@Override
+	public APISuccessMessage deleteCropFromListing(String farmerId, String cropId) {
+		try {
+			Objects.requireNonNull(farmerId, "Farmer Id is Null");
+			Objects.requireNonNull(cropId, "Crop Id is Null");
+			return farmerMongoTemplateService.deleteCropFromListing(farmerId, cropId);
+		} catch (Exception e) {
+			throw new FarmerException(e.getMessage());
+		}
+	}
+
+	@Override
+	public APISuccessMessage updateCropInListing(String farmerId, String cropId, CropListing updatedCrop) {
+		try {
+			Objects.requireNonNull(farmerId, "Farmer Id is Null");
+			Objects.requireNonNull(cropId, "Crop Id is Null");
+			return farmerMongoTemplateService.updateCropInListing(farmerId, cropId, updatedCrop);
 		} catch (Exception e) {
 			throw new FarmerException(e.getMessage());
 		}

@@ -32,7 +32,10 @@ public class UserServiceImpl implements UserService {
 
 			// Buyer Nav Items
 			new UserNavItems("Dashboard", "fa-solid fa-users-gear", "Quick access to product listings and prices",
-					UserTypeEnum.BUYER.toString(), "dashboard", 1));
+					UserTypeEnum.BUYER.toString(), "dashboard", 1),
+			new UserNavItems("Crop Bidding", "fa-solid fa-hand-holding-dollar", "View crops and place your bids.",
+					UserTypeEnum.BUYER.toString(), "crop-bidding", 2));
+	
 
 	@Autowired
 	private UserRepository userRepository;
@@ -104,6 +107,7 @@ public class UserServiceImpl implements UserService {
 			if (loggedInUser != null) {
 				if (login.getPassword().trim().equals(loggedInUser.getPassword())) {
 					UserDto user = new UserDto();
+					loggedInUser.setPassword(null);
 					BeanUtils.copyProperties(loggedInUser, user);
 					return user;
 				} else {

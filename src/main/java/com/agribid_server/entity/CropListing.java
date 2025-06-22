@@ -6,14 +6,17 @@ import com.agribid_server.enums.CropStatus;
 public class CropListing {
 
 	private String id;
+	private String country;
 	private String state;
 	private String district;
 	private String village;
 	private String cropName;
-	private String weight;
+	private double weight;
+	private String measure;
 	private String quality;
 	private CropStatus status;
 	private LocalDate listedAt;
+	private LocalDate modifiedAt;
 
 	public String getId() {
 		return id;
@@ -21,6 +24,14 @@ public class CropListing {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 	public String getState() {
@@ -55,12 +66,20 @@ public class CropListing {
 		this.cropName = cropName;
 	}
 
-	public String getWeight() {
+	public double getWeight() {
 		return weight;
 	}
 
-	public void setWeight(String weight) {
+	public void setWeight(double weight) {
 		this.weight = weight;
+	}
+
+	public String getMeasure() {
+		return measure;
+	}
+
+	public void setMeasure(String measure) {
+		this.measure = measure;
 	}
 
 	public String getQuality() {
@@ -85,6 +104,14 @@ public class CropListing {
 
 	public void setListedAt(LocalDate listedAt) {
 		this.listedAt = listedAt;
+	}
+
+	public LocalDate getModifiedAt() {
+		return modifiedAt;
+	}
+
+	public void setModifiedAt(LocalDate modifiedAt) {
+		this.modifiedAt = modifiedAt;
 	}
 
 }
