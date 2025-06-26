@@ -9,5 +9,13 @@ spring:
 server:
  agri-bid-serve:
   url: https://agribid-server-1.onrender.com/agri-bid	   
+ 
+# Server Error handling   
+server:
+ error:
+  include-message: always  
+  include-binding-errors: always
+  include-stacktrace: on_param
+  
    
    
