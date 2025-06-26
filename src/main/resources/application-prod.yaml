@@ -6,7 +6,7 @@ spring:
    database: ${MONGO_DB_NAME}
    
 # Server Url
-server:
+service:
  agri-bid-serve:
   url: https://agribid-server-1.onrender.com/agri-bid	   
  
