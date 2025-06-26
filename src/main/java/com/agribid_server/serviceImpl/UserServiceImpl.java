@@ -29,7 +29,9 @@ public class UserServiceImpl implements UserService {
 					UserTypeEnum.FARMER.toString(), "dashboard", 1),
 			new UserNavItems("Crop Listings", "fa-solid fa-list", "View and mannage your crop listings",
 					UserTypeEnum.FARMER.toString(), "crop-listings", 2),
-
+			new UserNavItems("My Crop Bids", "fa-solid fa-chart-simple", "View all bids placed by buyers on your crops",
+					UserTypeEnum.FARMER.toString(), "my-crop-bids", 3),
+			
 			// Buyer Nav Items
 			new UserNavItems("Dashboard", "fa-solid fa-users-gear", "Quick access to product listings and prices",
 					UserTypeEnum.BUYER.toString(), "dashboard", 1),

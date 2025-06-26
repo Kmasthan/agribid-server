@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,10 +36,16 @@ public class BuyerController {
 			@PathVariable("cropid") String cropId, @RequestBody BidDetailsDto bidDetails) {
 		return buyerService.placeNewBidForCrop(farmerId, cropId, bidDetails);
 	}
-	
+
 	@GetMapping("crop-bids/{farmerid}/{cropid}")
 	public List<BidDetailsDto> getCropBidDetails(@PathVariable("farmerid") String farmerId,
 			@PathVariable("cropid") String cropId) {
 		return buyerService.getCropBidDetailsList(farmerId, cropId);
+	}
+
+	@PutMapping("update-bid/{farmerid}/{cropid}")
+	public APISuccessMessage updateCropBidDetails(@PathVariable("farmerid") String farmerId,
+			@PathVariable("cropid") String cropId, @RequestBody BidDetailsDto bidDetails) {
+		return buyerService.updateCropBidDetails(farmerId, cropId, bidDetails);
 	}
 }

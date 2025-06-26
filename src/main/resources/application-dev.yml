@@ -1,0 +1,11 @@
+# Data base connectivity
+spring:
+ data:
+  mongodb:
+   uri: ${MONGO_URI}
+   database: ${MONGO_DB_NAME}
+   
+# Server Url
+server:
+ agri-bid-serve:
+  url: http://localhost:8082/agri-bid	      

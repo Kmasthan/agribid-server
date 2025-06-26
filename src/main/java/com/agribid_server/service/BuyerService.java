@@ -14,4 +14,6 @@ public interface BuyerService {
 
 	List<BidDetailsDto> getCropBidDetailsList(String farmerId, String cropId);
 
+	APISuccessMessage updateCropBidDetails(String farmerId, String cropId, BidDetailsDto bidDetails);
+
 }

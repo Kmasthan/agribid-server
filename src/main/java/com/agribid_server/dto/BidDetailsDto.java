@@ -103,4 +103,5 @@ public class BidDetailsDto {
 	public void setModifiedAt(LocalDate modifiedAt) {
 		this.modifiedAt = modifiedAt;
 	}
+
 }

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.agribid_server.dto.APISuccessMessage;
+import com.agribid_server.dto.BidDetailsDto;
+import com.agribid_server.dto.CropBidsDto;
 import com.agribid_server.entity.CropListing;
 import com.agribid_server.service.FarmerService;
 
@@ -31,20 +33,35 @@ public class FarmerController {
 			@RequestBody CropListing newCrop) {
 		return farmerService.addNewCropToListing(farmerId, farmerName, farmerPhone, farmerEmail, position, newCrop);
 	}
-	
+
 	@GetMapping("get-crop-lisitngs")
 	public List<CropListing> getFarmerCropListings(@RequestParam("farmerId") String farmerId) {
 		return farmerService.getFarmerCropListings(farmerId);
 	}
-	
+
 	@DeleteMapping("delete-crop/{farmerid}/{cropid}")
-	public APISuccessMessage deleteCropFromListing(@PathVariable("farmerid") String farmerId, @PathVariable("cropid") String cropId) {
+	public APISuccessMessage deleteCropFromListing(@PathVariable("farmerid") String farmerId,
+			@PathVariable("cropid") String cropId) {
 		return farmerService.deleteCropFromListing(farmerId, cropId);
 	}
-	
+
 	@PutMapping("update-crop/{farmerid}/{cropid}")
-	public APISuccessMessage updateCropInListing(@PathVariable("farmerid") String farmerId, @PathVariable("cropid") String cropId, @RequestBody CropListing updatedCrop) {
+	public APISuccessMessage updateCropInListing(@PathVariable("farmerid") String farmerId,
+			@PathVariable("cropid") String cropId, @RequestBody CropListing updatedCrop) {
 		return farmerService.updateCropInListing(farmerId, cropId, updatedCrop);
+	}
+
+	@GetMapping("get-bidded-crops/{farmerid}")
+	public List<CropBidsDto> getBiddedCropsList(@PathVariable("farmerid") String farmerId,
+			@RequestParam("country") String country, @RequestParam("state") String state,
+			@RequestParam("district") String district, @RequestParam("village") String village) {
+		return farmerService.getBiddedCrops(farmerId, country, state, district, village);
+	}
+
+	@GetMapping("get-latest-bid-for-crop/{farmerid}/{cropid}")
+	public BidDetailsDto getLatestBidForCrop(@PathVariable("farmerid") String farmerId,
+			@PathVariable("cropid") String cropId) {
+		return farmerService.getLatestBidForCrop(farmerId, cropId);
 	}
 
 }

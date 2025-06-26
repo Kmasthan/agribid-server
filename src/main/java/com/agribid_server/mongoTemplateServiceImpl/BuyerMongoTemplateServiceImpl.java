@@ -34,9 +34,10 @@ public class BuyerMongoTemplateServiceImpl implements BuyerMongoTemplateService 
 		try {
 
 			MatchOperation matchOperation = Aggregation
-					.match(Criteria.where("cropsList.country").is(country).and("cropsList.state").is(state)
-							.and("cropsList.district").is(district).and("cropsList.village").is(village));
-
+						.match(Criteria.where("cropsList.country").is(country).and("cropsList.state").is(state)
+							.and("cropsList.district").is(district).and("cropsList.village").is(village)
+							.and("cropsList.status").is("ACTIVE"));
+	
 			UnwindOperation unwindOperation = Aggregation.unwind("cropsList");
 
 			ProjectionOperation projectOperation = Aggregation.project().and("cropsList").as("cropData")

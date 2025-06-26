@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,8 +63,40 @@ public class BuyerServiceImpl implements BuyerService {
 			CropBidDetails cropBidDetails = cropBidDetailsRepository.findByFarmerIdAndCropId(farmerId, cropId);
 			if (cropBidDetails != null && cropBidDetails.getBidDetails() != null
 					&& !cropBidDetails.getBidDetails().isEmpty()) {
-				return cropBidDetails.getBidDetails().stream().sorted(Comparator.comparing(BidDetailsDto::getBidAmount).reversed())
-						.toList();
+				return cropBidDetails.getBidDetails().stream()
+						.sorted(Comparator.comparing(BidDetailsDto::getBidAmount).reversed()).toList();
+			} else {
+				throw new BuyerException("Bids not found for the crop");
+			}
+		} catch (Exception e) {
+			throw new BuyerException(e.getMessage());
+		}
+	}
+
+	@Override
+	public APISuccessMessage updateCropBidDetails(String farmerId, String cropId, BidDetailsDto bidDetails) {
+		try {
+			Objects.requireNonNull(farmerId, "FarmerId is null");
+			Objects.requireNonNull(cropId, "Crop Id is null");
+			Objects.requireNonNull(bidDetails, "Bid details is null");
+
+			CropBidDetails cropBidDetails = cropBidDetailsRepository.findByFarmerIdAndCropId(farmerId, cropId);
+			if (cropBidDetails != null && cropBidDetails.getBidDetails() != null
+					&& !cropBidDetails.getBidDetails().isEmpty()) {
+				BidDetailsDto matchedBid = cropBidDetails.getBidDetails().stream()
+						.filter(bid -> bid.getBuyerId().equals(bidDetails.getBuyerId())).findFirst().orElse(null);
+
+				if (matchedBid != null) {
+					int index = cropBidDetails.getBidDetails().indexOf(matchedBid);
+					if (index > -1) {
+						bidDetails.setModifiedAt(LocalDate.now());
+						cropBidDetails.getBidDetails().set(index, bidDetails);
+					}
+					cropBidDetailsRepository.save(cropBidDetails);
+					return new APISuccessMessage("Bid updated successfully", "success");
+				} else {
+					throw new BuyerException("No Bid found to update");
+				}
 			} else {
 				throw new BuyerException("Bids not found for the crop");
 			}

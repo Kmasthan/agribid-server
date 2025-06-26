@@ -18,6 +18,8 @@ public class CropBidDetails {
 	private String cropId;
 	private List<BidDetailsDto> bidDetails;
 	private LocalDate createdAt;
+	
+	private BidDetailsDto highestBid;
 
 	public String getId() {
 		return id;
@@ -57,5 +59,13 @@ public class CropBidDetails {
 
 	public void setCreatedAt(LocalDate createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public BidDetailsDto getHighestBid() {
+		return highestBid;
+	}
+
+	public void setHighestBid(BidDetailsDto highestBid) {
+		this.highestBid = highestBid;
 	}
 }
