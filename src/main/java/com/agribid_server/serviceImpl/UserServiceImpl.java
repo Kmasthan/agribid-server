@@ -9,12 +9,15 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.agribid_server.cloud_binary.CloudBinaryService;
 import com.agribid_server.dto.APISuccessMessage;
 import com.agribid_server.dto.LoginDto;
 import com.agribid_server.dto.UserDto;
 import com.agribid_server.dto.UserNavItems;
 import com.agribid_server.entity.User;
+import com.agribid_server.enums.UserTypeEnum;
 import com.agribid_server.exception.UserException;
 import com.agribid_server.repository.UserRepository;
 import com.agribid_server.service.UserService;
@@ -23,7 +26,7 @@ import com.agribid_server.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	List<UserNavItems> userNavItems = Arrays.asList(
-			
+
 			// Farmer Nav Items
 			new UserNavItems("Dashboard", "fa-solid fa-users-gear", "Quick access to product listings and prices",
 					UserTypeEnum.FARMER.toString(), "dashboard", 1),
@@ -31,24 +34,33 @@ public class UserServiceImpl implements UserService {
 					UserTypeEnum.FARMER.toString(), "crop-listings", 2),
 			new UserNavItems("My Crop Bids", "fa-solid fa-chart-simple", "View all bids placed by buyers on your crops",
 					UserTypeEnum.FARMER.toString(), "my-crop-bids", 3),
-			
+			new UserNavItems("Quick Chat", "fa-solid fa-comments", "Communicate with the Buyer's",
+					UserTypeEnum.FARMER.toString(), "quick-chat", 4),
+
 			// Buyer Nav Items
 			new UserNavItems("Dashboard", "fa-solid fa-users-gear", "Quick access to product listings and prices",
 					UserTypeEnum.BUYER.toString(), "dashboard", 1),
 			new UserNavItems("Crop Bidding", "fa-solid fa-hand-holding-dollar", "View crops and place your bids.",
-					UserTypeEnum.BUYER.toString(), "crop-bidding", 2));
-	
+					UserTypeEnum.BUYER.toString(), "crop-bidding", 2),
+			new UserNavItems("Quick Chat", "fa-solid fa-comments", "Communicate with the Farmer's",
+					UserTypeEnum.BUYER.toString(), "quick-chat", 3));
 
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private CloudBinaryService clodBinaryService;
+
 	@Override
-	public APISuccessMessage saveUser(UserDto registeredUser) {
+	public APISuccessMessage saveUser(UserDto registeredUser, MultipartFile file) {
 		try {
 			if (registeredUser != null) {
 				validateUserRegistrationData(registeredUser);
+
+				String uploadedImgUrl = clodBinaryService.uploadFile(file);
 				User newUser = new User();
 				BeanUtils.copyProperties(registeredUser, newUser);
+				newUser.setImageUrl(uploadedImgUrl);
 				User savedUser = userRepository.save(newUser);
 				UserDto savedUserDto = new UserDto();
 				BeanUtils.copyProperties(savedUser, savedUserDto);
@@ -63,14 +75,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * << validateUserRegistrationData() is to validate the user registration data >>
+	 * << validateUserRegistrationData() is to validate the user registration data
+	 * >>
+	 * 
 	 * @param registeredUser
 	 */
 	private void validateUserRegistrationData(UserDto registeredUser) {
 		try {
 			Objects.requireNonNull(registeredUser.getName(), "User name is required for registration");
 			Objects.requireNonNull(registeredUser.getMobileNumber(), "User mobile number is required for registration");
-			
+
 			// check the user already exists
 			checkTheUserExistsOrNot(registeredUser);
 		} catch (Exception e) {
@@ -81,6 +95,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * << To check the user already exist or not >>
+	 * 
 	 * @param registeredUser
 	 */
 	private void checkTheUserExistsOrNot(UserDto registeredUser) {

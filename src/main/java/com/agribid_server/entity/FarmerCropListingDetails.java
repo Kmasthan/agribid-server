@@ -4,19 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "farmer-crop-listing")
-@CompoundIndexes({
-    @CompoundIndex(name = "farmer_id_idx", def = "{'farmerId': 1}")
-})
 public class FarmerCropListingDetails {
 	
 	@Id
 	private String id;
 	
+	@Indexed
 	private String farmerId;
 	private String farmerName;
 	private String farmerPhone;

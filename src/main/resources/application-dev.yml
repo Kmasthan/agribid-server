@@ -4,8 +4,19 @@ spring:
   mongodb:
    uri: ${MONGO_URI}
    database: ${MONGO_DB_NAME}
+   auto-index-creation: true
    
-# Server Url
-server:
- agri-bid-serve:
-  url: http://localhost:8082/agri-bid	      
+# Server Url's
+service:
+ agri-bid-server:
+  url: http://localhost:8082/agri-bid/	
+ quick-convo-server:
+  url: http://localhost:8083/quickconvo/      
+  
+# Cloud Storage Cred
+cloud:  
+ api:
+  name: ${CLOUD_NAME}
+  key: ${CLOUD_API_KEY}
+  secret: 4{CLOUD_API_SECRET}
+  

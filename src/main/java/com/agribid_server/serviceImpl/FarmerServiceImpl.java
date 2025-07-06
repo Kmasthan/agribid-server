@@ -17,10 +17,12 @@ import com.agribid_server.dto.CropBidsDto;
 import com.agribid_server.entity.CropBidDetails;
 import com.agribid_server.entity.CropListing;
 import com.agribid_server.entity.FarmerCropListingDetails;
+import com.agribid_server.entity.SoldCropBidDetails;
 import com.agribid_server.exception.FarmerException;
+import com.agribid_server.microHelperService.FarmerMicroHelperService;
 import com.agribid_server.mongoTemplateService.FarmerMongoTemplateService;
-import com.agribid_server.repository.CropBidDetailsRepository;
 import com.agribid_server.repository.FarmerCropListingDetailsRepository;
+import com.agribid_server.repository.SoldCropBidDetailsRepository;
 import com.agribid_server.service.FarmerService;
 
 @Service
@@ -33,7 +35,10 @@ public class FarmerServiceImpl implements FarmerService {
 	private FarmerMongoTemplateService farmerMongoTemplateService;
 
 	@Autowired
-	private CropBidDetailsRepository cropBidDetailsRepository;
+	private SoldCropBidDetailsRepository soldCropBidDetailsRepository;
+
+	@Autowired
+	private FarmerMicroHelperService farmerMicroHelperService;
 
 	@Override
 	public APISuccessMessage addNewCropToListing(String farmerId, String farmerName, String farmerPhone,
@@ -144,6 +149,43 @@ public class FarmerServiceImpl implements FarmerService {
 				return cropsBidsDetails.getHighestBid();
 			} else {
 				throw new FarmerException("Bid not found!");
+			}
+		} catch (Exception e) {
+			throw new FarmerException(e.getMessage());
+		}
+	}
+
+	@Override
+	public APISuccessMessage acceptBidForCrop(String farmerId, String cropId, String buyerId, CropListing updatedCrop) {
+		try {
+			Objects.requireNonNull(farmerId, "Farmer Id is Null");
+			Objects.requireNonNull(cropId, "Crop Id is Null");
+			Objects.requireNonNull(buyerId, "Buyer Id is Null");
+			Objects.requireNonNull(updatedCrop, "Update crop is required");
+			// to get the accepted bid details
+			SoldCropBidDetails cropsBidsDetails = farmerMongoTemplateService.getAcceptedBidDetailsForCrop(farmerId,
+					cropId, buyerId);
+
+			if (cropsBidsDetails != null) {
+				APISuccessMessage updateCropResponse = updateCropInListing(farmerId, cropId, updatedCrop);
+
+				if ("SUCCESS".equals(updateCropResponse.getStatus())) {
+					SoldCropBidDetails newSoldCrop = new SoldCropBidDetails();
+					newSoldCrop.setFarmerId(cropsBidsDetails.getFarmerId());
+					newSoldCrop.setCropId(cropsBidsDetails.getCropId());
+					newSoldCrop.setAcceptedBid(cropsBidsDetails.getAcceptedBid());
+					soldCropBidDetailsRepository.save(newSoldCrop);
+
+					APISuccessMessage deleteCropBidDetailsResponse = farmerMicroHelperService
+							.deleteCropBidDetailsWithId(cropsBidsDetails.getId());
+
+					if ("SUCCESS".equals(deleteCropBidDetailsResponse.getStatus())) {
+						return new APISuccessMessage("Crop sold succesfully", "SUCCESS");
+					}
+				}
+				throw new FarmerException("Crop status updation failed");
+			} else {
+				throw new FarmerException("Error while getting bid details");
 			}
 		} catch (Exception e) {
 			throw new FarmerException(e.getMessage());

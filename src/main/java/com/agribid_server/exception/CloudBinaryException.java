@@ -1,17 +1,15 @@
 package com.agribid_server.exception;
 
-public class FarmerException extends RuntimeException{
-
+public class CloudBinaryException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	private final String message;
-	
-	public FarmerException(String msg) {
-		super();
+
+	public CloudBinaryException(String msg) {
 		this.message = msg;
 	}
-	
+
 	@Override
 	public String getMessage() {
-		return message;
+		return this.message;
 	}
 }

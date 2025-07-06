@@ -8,6 +8,7 @@ import com.agribid_server.dto.APISuccessMessage;
 import com.agribid_server.dto.CropBidsDto;
 import com.agribid_server.entity.CropBidDetails;
 import com.agribid_server.entity.CropListing;
+import com.agribid_server.entity.SoldCropBidDetails;
 
 public interface FarmerMongoTemplateService {
 
@@ -24,4 +25,6 @@ public interface FarmerMongoTemplateService {
 			String village, Set<String> biddedCropIds);
 
 	public CropBidDetails getLatestBidForCrop(String farmerId, String cropId);
+
+	public SoldCropBidDetails getAcceptedBidDetailsForCrop(String farmerId, String cropId, String buyerId);
 }

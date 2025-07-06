@@ -21,4 +21,6 @@ public interface FarmerService {
 	List<CropBidsDto> getBiddedCrops(String farmerId, String country, String state, String district, String village);
 
 	BidDetailsDto getLatestBidForCrop(String farmerId, String cropId);
+
+	APISuccessMessage acceptBidForCrop(String farmerId, String cropId, String buyerId, CropListing updatedCrop);
 }

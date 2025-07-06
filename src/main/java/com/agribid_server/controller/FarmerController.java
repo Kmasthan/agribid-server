@@ -64,4 +64,11 @@ public class FarmerController {
 		return farmerService.getLatestBidForCrop(farmerId, cropId);
 	}
 
+	@PutMapping("accept-bid/{farmerid}/{cropid}/{buyerid}")
+	public APISuccessMessage acceptBidForCrop(@PathVariable("farmerid") String farmerId,
+			@PathVariable("cropid") String cropId, @PathVariable("buyerid") String buyerId,
+			@RequestBody CropListing updatedCrop) {
+		return farmerService.acceptBidForCrop(farmerId, cropId, buyerId, updatedCrop);
+	}
+
 }

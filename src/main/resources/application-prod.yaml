@@ -4,11 +4,12 @@ spring:
   mongodb:
    uri: ${MONGO_URI}
    database: ${MONGO_DB_NAME}
+   auto-index-creation: true
    
 # Server Url
 service:
- agri-bid-serve:
-  url: https://agribid-server-1.onrender.com/agri-bid	   
+ agri-bid-server:
+  url: https://agribid-server-1.onrender.com/agri-bid/	   
  
 # Server Error handling   
 server:

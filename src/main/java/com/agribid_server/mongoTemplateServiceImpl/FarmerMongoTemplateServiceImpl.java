@@ -26,6 +26,7 @@ import com.agribid_server.dto.CropBidsDto;
 import com.agribid_server.entity.CropBidDetails;
 import com.agribid_server.entity.CropListing;
 import com.agribid_server.entity.FarmerCropListingDetails;
+import com.agribid_server.entity.SoldCropBidDetails;
 import com.agribid_server.exception.FarmerException;
 import com.agribid_server.mongoTemplateService.FarmerMongoTemplateService;
 import com.mongodb.client.result.UpdateResult;
@@ -104,7 +105,7 @@ public class FarmerMongoTemplateServiceImpl implements FarmerMongoTemplateServic
 			// Performs the UPDATEFIRST
 			mongoTemplate.updateFirst(matchQuery, update, FarmerCropListingDetails.class);
 
-			return new APISuccessMessage("Crop updated succesfully", "success");
+			return new APISuccessMessage("Crop updated succesfully", "SUCCESS");
 		} catch (Exception e) {
 			throw new FarmerException(e.getMessage());
 		}
@@ -189,6 +190,35 @@ public class FarmerMongoTemplateServiceImpl implements FarmerMongoTemplateServic
 				return aggregationResult.getUniqueMappedResult();
 			} else {
 				throw new FarmerException("Bids not found for the crops!");
+			}
+		} catch (Exception e) {
+			throw new FarmerException(e.getMessage());
+		}
+	}
+
+	@Override
+	public SoldCropBidDetails getAcceptedBidDetailsForCrop(String farmerId, String cropId, String buyerId) {
+		try {
+			MatchOperation matchOperation1 = Aggregation
+					.match(Criteria.where("farmerId").is(farmerId).and("cropId").is(cropId));
+
+			UnwindOperation unwindOperation = Aggregation.unwind("bidDetails");
+
+			MatchOperation matchOperation2 = Aggregation.match(Criteria.where("bidDetails.buyerId").is(buyerId));
+
+			ProjectionOperation projectionOperation = Aggregation.project().and("bidDetails").as("acceptedBid")
+					.andInclude("farmerId", "cropId");
+
+			Aggregation aggregation = Aggregation.newAggregation(matchOperation1, unwindOperation, matchOperation2,
+					projectionOperation);
+
+			AggregationResults<SoldCropBidDetails> aggregationResult = mongoTemplate.aggregate(aggregation,
+					"crop-bid-details", SoldCropBidDetails.class);
+
+			if (aggregationResult.getUniqueMappedResult() != null) {
+				return aggregationResult.getUniqueMappedResult();
+			} else {
+				return null;
 			}
 		} catch (Exception e) {
 			throw new FarmerException(e.getMessage());

@@ -12,17 +12,20 @@ public class User {
 	private String Id;
 
 	private String name;
-	
-	@Indexed(unique = true)
+
+	@Indexed
 	private String mobileNumber;
-	
+
+	@Indexed
 	private String email;
+
 	private String password;
 	private String state;
 	private String district;
 	private String mandal;
 	private String village;
 	private String userType;
+	private String imageUrl;
 
 	public String getId() {
 		return Id;
@@ -102,6 +105,14 @@ public class User {
 
 	public void setUserType(String userType) {
 		this.userType = userType;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 }

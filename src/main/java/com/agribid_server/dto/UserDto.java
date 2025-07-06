@@ -1,5 +1,7 @@
 package com.agribid_server.dto;
 
+import java.io.InputStream;
+
 public class UserDto {
 
 	private String id;
@@ -12,6 +14,7 @@ public class UserDto {
 	private String mandal;
 	private String village;
 	private String userType;
+	private String imageUrl;
 
 	public String getId() {
 		return id;
@@ -91,5 +94,13 @@ public class UserDto {
 
 	public void setUserType(String userType) {
 		this.userType = userType;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }

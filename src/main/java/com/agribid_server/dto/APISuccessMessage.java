@@ -4,7 +4,10 @@ public class APISuccessMessage {
 	private String message;
 	private String status;
 	private Object data;
-	
+
+	public APISuccessMessage() {
+	}
+
 	public APISuccessMessage(String message, String status) {
 		super();
 		this.message = message;
