@@ -18,5 +18,5 @@ cloud:
  api:
   name: ${CLOUD_NAME}
   key: ${CLOUD_API_KEY}
-  secret: 4{CLOUD_API_SECRET}
+  secret: ${CLOUD_API_SECRET}
   

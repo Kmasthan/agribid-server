@@ -20,5 +20,12 @@ server:
   include-binding-errors: always
   include-stacktrace: on_param
   
+# Cloud Storage Cred
+cloud:  
+ api:
+  name: ${CLOUD_NAME}
+  key: ${CLOUD_API_KEY}
+  secret: ${CLOUD_API_SECRET}  
+  
    
    
