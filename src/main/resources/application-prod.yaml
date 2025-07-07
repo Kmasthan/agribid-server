@@ -9,7 +9,9 @@ spring:
 # Server Url
 service:
  agri-bid-server:
-  url: https://agribid-server-1.onrender.com/agri-bid/	   
+  url: https://agribid-server-1.onrender.com/agri-bid/
+ quick-convo-server:
+    url: https://quickconvo-server.onrender.com/   	   
  
 # Server Error handling   
 server:
