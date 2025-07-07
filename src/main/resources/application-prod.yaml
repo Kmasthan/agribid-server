@@ -11,7 +11,7 @@ service:
  agri-bid-server:
   url: https://agribid-server-1.onrender.com/agri-bid/
  quick-convo-server:
-    url: https://quickconvo-server.onrender.com/quickconvo   	   
+    url: https://quickconvo-server.onrender.com/quickconvo/   	   
  
 # Server Error handling   
 server:
