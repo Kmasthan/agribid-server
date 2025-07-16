@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.agribid_server.dto.APISuccessMessage;
 import com.agribid_server.dto.BidDetailsDto;
+import com.agribid_server.dto.BuyerDashboardBidsDto;
 import com.agribid_server.dto.CropsBiddingDto;
 import com.agribid_server.service.BuyerService;
 
@@ -47,5 +48,10 @@ public class BuyerController {
 	public APISuccessMessage updateCropBidDetails(@PathVariable("farmerid") String farmerId,
 			@PathVariable("cropid") String cropId, @RequestBody BidDetailsDto bidDetails) {
 		return buyerService.updateCropBidDetails(farmerId, cropId, bidDetails);
+	}
+
+	@GetMapping("crop-bids-for-dashboard/{id}")
+	public List<BuyerDashboardBidsDto> getCropBidsForDashboard(@PathVariable("id") String userId) {
+		return buyerService.getCropBidsListForDashboard(userId);
 	}
 }

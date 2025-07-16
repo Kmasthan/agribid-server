@@ -71,4 +71,9 @@ public class FarmerController {
 		return farmerService.acceptBidForCrop(farmerId, cropId, buyerId, updatedCrop);
 	}
 
+	@GetMapping("get-bidded-crops-dashboard/{farmerid}")
+	public List<CropBidsDto> getBiddedCropsListForDashBoard(@PathVariable("farmerid") String farmerId) {
+		return farmerService.getCropsBidDetailsForDashboard(farmerId);
+	}
+
 }

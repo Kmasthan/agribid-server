@@ -7,11 +7,15 @@ import org.springframework.stereotype.Repository;
 
 import com.agribid_server.entity.CropBidDetails;
 
+import jakarta.validation.constraints.NotNull;
+
 @Repository
 public interface CropBidDetailsRepository extends MongoRepository<CropBidDetails, String> {
 
 	CropBidDetails findByFarmerIdAndCropId(String farmerId, String cropId);
 
 	List<CropBidDetails> findByFarmerId(String farmerId);
+
+	List<CropBidDetails> findByBidDetailsBuyerId(@NotNull(message = "Buyer id is required") String userId);
 
 }

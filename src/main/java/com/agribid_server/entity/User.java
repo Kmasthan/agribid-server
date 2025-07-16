@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 public class User {
 
 	@Id
-	private String Id;
+	private String id;
 
 	private String name;
 
@@ -28,11 +28,11 @@ public class User {
 	private String imageUrl;
 
 	public String getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(String id) {
-		Id = id;
+		this.id = id;
 	}
 
 	public String getName() {

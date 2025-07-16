@@ -1,7 +1,5 @@
 package com.agribid_server.dto;
 
-import java.io.InputStream;
-
 public class UserDto {
 
 	private String id;

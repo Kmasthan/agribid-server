@@ -14,6 +14,7 @@ public class UserCommunicationDto {
 	private String receverMobile;
 	private String message;
 	private boolean edited;
+	private String imageUrl;
 	private LocalDateTime createdAt;
 	private LocalDateTime modifiedAt;
 	public String getId() {
@@ -69,6 +70,12 @@ public class UserCommunicationDto {
 	}
 	public void setEdited(boolean edited) {
 		this.edited = edited;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 	public LocalDateTime getCreatedAt() {
 		return createdAt;

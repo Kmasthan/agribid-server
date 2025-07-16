@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.agribid_server.dto.APISuccessMessage;
 import com.agribid_server.dto.BidDetailsDto;
+import com.agribid_server.dto.BuyerDashboardBidsDto;
 import com.agribid_server.dto.CropsBiddingDto;
 
 public interface BuyerService {
@@ -15,5 +16,7 @@ public interface BuyerService {
 	List<BidDetailsDto> getCropBidDetailsList(String farmerId, String cropId);
 
 	APISuccessMessage updateCropBidDetails(String farmerId, String cropId, BidDetailsDto bidDetails);
+
+	List<BuyerDashboardBidsDto> getCropBidsListForDashboard(String userId);
 
 }

@@ -27,4 +27,6 @@ public interface FarmerMongoTemplateService {
 	public CropBidDetails getLatestBidForCrop(String farmerId, String cropId);
 
 	public SoldCropBidDetails getAcceptedBidDetailsForCrop(String farmerId, String cropId, String buyerId);
+
+	public List<CropBidsDto> getCropBidsForDashboard(String farmerId, Set<String> biddedCropIds);
 }

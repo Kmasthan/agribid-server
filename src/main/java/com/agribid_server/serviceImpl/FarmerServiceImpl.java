@@ -192,4 +192,38 @@ public class FarmerServiceImpl implements FarmerService {
 		}
 	}
 
+	@Override
+	public List<CropBidsDto> getCropsBidDetailsForDashboard(String farmerId) {
+		try {
+			Objects.requireNonNull(farmerId, "Farmer Id is Null");
+			// to get the crops bids details
+			HashMap<String, CropBidDetails> cropsBidsDetails = farmerMongoTemplateService
+					.getCropBidsDetailsWithHighestBid(farmerId);
+
+			List<CropBidsDto> cropBidDetails;
+			if (cropsBidsDetails != null && !cropsBidsDetails.isEmpty()) {
+				Set<String> biddedCropIds = cropsBidsDetails.keySet();
+
+				cropBidDetails = farmerMongoTemplateService.getCropBidsForDashboard(farmerId, biddedCropIds);
+				if (cropBidDetails != null && !cropBidDetails.isEmpty()) {
+					for (CropBidsDto biddedCrop : cropBidDetails) {
+						// setting the bid details for the crop details
+						biddedCrop.setBidDetails(
+								cropsBidsDetails.get(biddedCrop.getCropDetails().getId()).getHighestBid());
+					}
+					// clearing the cropsBidsDetails
+					cropsBidsDetails.clear();
+
+					return cropBidDetails;
+				} else {
+					throw new FarmerException("Bidded crops not found");
+				}
+			} else {
+				throw new FarmerException("No bids for your crops");
+			}
+		} catch (Exception e) {
+			throw new FarmerException(e.getMessage());
+		}
+	}
+
 }

@@ -225,4 +225,33 @@ public class FarmerMongoTemplateServiceImpl implements FarmerMongoTemplateServic
 		}
 	}
 
+	@Override
+	public List<CropBidsDto> getCropBidsForDashboard(String farmerId, Set<String> biddedCropIds) {
+		try {
+			MatchOperation matchOperation1 = Aggregation.match(Criteria.where("farmerId").is(farmerId));
+
+			UnwindOperation unwindOperation = Aggregation.unwind("cropsList");
+
+			MatchOperation matchOperation2 = Aggregation
+					.match(Criteria.where("cropsList._id").in(biddedCropIds).and("cropsList.status").is("ACTIVE"));
+
+			ProjectionOperation projectionOperation = Aggregation.project().and("cropsList").as("cropDetails")
+					.andExclude("_id");
+
+			Aggregation aggregation = Aggregation.newAggregation(matchOperation1, unwindOperation, matchOperation2,
+					projectionOperation);
+
+			AggregationResults<CropBidsDto> aggregationResults = mongoTemplate.aggregate(aggregation,
+					"farmer-crop-listing", CropBidsDto.class);
+
+			if (!aggregationResults.getMappedResults().isEmpty()) {
+				return aggregationResults.getMappedResults();
+			} else {
+				throw new FarmerException("Crops not found!");
+			}
+		} catch (Exception e) {
+			throw new FarmerException(e.getMessage());
+		}
+	}
+
 }

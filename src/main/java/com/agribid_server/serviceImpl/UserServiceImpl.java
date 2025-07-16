@@ -57,10 +57,13 @@ public class UserServiceImpl implements UserService {
 			if (registeredUser != null) {
 				validateUserRegistrationData(registeredUser);
 
-				String uploadedImgUrl = clodBinaryService.uploadFile(file);
 				User newUser = new User();
+				String uploadedImgUrl = "";
+				if (file != null && !file.isEmpty()) {
+					uploadedImgUrl = clodBinaryService.uploadFile(file);
+					newUser.setImageUrl(uploadedImgUrl);
+				}
 				BeanUtils.copyProperties(registeredUser, newUser);
-				newUser.setImageUrl(uploadedImgUrl);
 				User savedUser = userRepository.save(newUser);
 				UserDto savedUserDto = new UserDto();
 				BeanUtils.copyProperties(savedUser, savedUserDto);

@@ -1,15 +1,22 @@
 package com.agribid_server.serviceImpl;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.agribid_server.dto.APISuccessMessage;
 import com.agribid_server.dto.UserCommunicationDto;
+import com.agribid_server.dto.UserDto;
 import com.agribid_server.exception.UserCommunicationException;
 import com.agribid_server.microHelperService.UserCommunicationMicroHelperService;
+import com.agribid_server.repository.UserRepository;
 import com.agribid_server.service.UserCommunicationService;
 
 @Service
@@ -17,6 +24,9 @@ public class UserCommunicationServiceImpl implements UserCommunicationService {
 
 	@Autowired
 	private UserCommunicationMicroHelperService userCommunicationMicroHelperService;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	public List<UserCommunicationDto> getUserReceiversData(String userId) {
@@ -26,6 +36,7 @@ public class UserCommunicationServiceImpl implements UserCommunicationService {
 					.getUserReceiversDataFromDB(userId);
 
 			if (receiversData != null && !receiversData.isEmpty()) {
+				setImageUrlsForReceivers(receiversData);
 				return receiversData;
 			} else {
 				throw new UserCommunicationException("Not found any communications!");
@@ -79,6 +90,22 @@ public class UserCommunicationServiceImpl implements UserCommunicationService {
 			}
 		} catch (Exception e) {
 			throw new UserCommunicationException(e.getMessage());
+		}
+	}
+
+	private void setImageUrlsForReceivers(List<UserCommunicationDto> receivers) {
+		if (receivers != null && !receivers.isEmpty()) {
+			List<String> receiversIds = receivers.stream().map(UserCommunicationDto::getId).toList();
+
+			if (receiversIds != null && !receiversIds.isEmpty()) {
+				Map<String, UserDto> usersMap;
+				usersMap = userRepository.findByIdIn(receiversIds).stream()
+						.collect(Collectors.toMap(UserDto::getId, Function.identity()));
+				for (UserCommunicationDto receiver : receivers) {
+					receiver.setImageUrl(usersMap.get(receiver.getReceverId()).getImageUrl());
+				}
+			}
+
 		}
 	}
 

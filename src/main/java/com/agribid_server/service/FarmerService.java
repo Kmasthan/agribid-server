@@ -23,4 +23,6 @@ public interface FarmerService {
 	BidDetailsDto getLatestBidForCrop(String farmerId, String cropId);
 
 	APISuccessMessage acceptBidForCrop(String farmerId, String cropId, String buyerId, CropListing updatedCrop);
+
+	List<CropBidsDto> getCropsBidDetailsForDashboard(String farmerId);
 }

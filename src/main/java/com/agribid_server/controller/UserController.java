@@ -33,13 +33,13 @@ public class UserController {
 
 	@PostMapping(value = "save-farmer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public APISuccessMessage saveFarmer(@RequestPart("farmer") UserDto farmer,
-			@RequestPart("imageFile") MultipartFile file) {
+			@RequestPart(value = "imageFile", required = false) MultipartFile file) {
 		return userService.saveUser(farmer, file);
 	}
 
 	@PostMapping(value = "save-buyer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public APISuccessMessage saveBuyer(@RequestPart("buyer") UserDto buyer,
-			@RequestPart("imageFile") MultipartFile file) {
+			@RequestPart(value = "imageFile", required = false) MultipartFile file) {
 		return userService.saveUser(buyer, file);
 	}
 
