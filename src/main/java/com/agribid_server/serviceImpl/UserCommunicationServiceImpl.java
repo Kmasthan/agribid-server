@@ -1,10 +1,9 @@
 package com.agribid_server.serviceImpl;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -14,10 +13,13 @@ import org.springframework.stereotype.Service;
 import com.agribid_server.dto.APISuccessMessage;
 import com.agribid_server.dto.UserCommunicationDto;
 import com.agribid_server.dto.UserDto;
+import com.agribid_server.entity.User;
 import com.agribid_server.exception.UserCommunicationException;
 import com.agribid_server.microHelperService.UserCommunicationMicroHelperService;
 import com.agribid_server.repository.UserRepository;
 import com.agribid_server.service.UserCommunicationService;
+
+import jakarta.validation.constraints.NotNull;
 
 @Service
 public class UserCommunicationServiceImpl implements UserCommunicationService {
@@ -106,6 +108,23 @@ public class UserCommunicationServiceImpl implements UserCommunicationService {
 				}
 			}
 
+		}
+	}
+
+	@Override
+	public String getUserImageUrlWithUserId(@NotNull(message = "User id is required") String userId) {
+		try {
+			if (userId.equals("null") || userId.equals("undefined")) {
+				throw new UserCommunicationException("User id is required");
+			}
+			Optional<User> user = userRepository.findById(userId);
+			if (user.isPresent()) {
+				return user.get().getImageUrl();
+			} else {
+				throw new UserCommunicationException("User not found");
+			}
+		} catch (Exception e) {
+			throw new UserCommunicationException(e.getMessage());
 		}
 	}
 
