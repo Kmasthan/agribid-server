@@ -13,4 +13,6 @@ public interface UserCommunicationService {
 
 	List<UserCommunicationDto> getAllChatsData(String senderId, String receiverId);
 
+	String getUserImageUrlWithUserId(String userId);
+
 }
