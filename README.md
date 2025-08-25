@@ -26,12 +26,11 @@ AgriBid Server is the backend application for the AgriBid platform. It provides 
 ```bash
 https://github.com/Kmasthan/agribid-server.git
 ```
-
-## Navigate to the project directory
+2. Navigate to the project directory
 ```bash
 cd agribid-server
 ```
-## Build and run the application
+3. Build and run the application
 ```bash
 ./gradlew bootRun
 ```
